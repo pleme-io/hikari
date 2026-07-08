@@ -1,0 +1,28 @@
+[package]
+name = "hikari-ts"
+description = "hikari (光) — the tree-sitter backend. A generic TreeSitterHighlighter (one type for every tree-sitter grammar) that implements hikari_core::Highlighter over escriba-ts's shipping GrammarRegistry + highlight(), lowering tree-sitter captures to hikari HlClass through the coverage-by-construction SpanSink."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme = "../../README.md"
+keywords = ["syntax", "highlighting", "tree-sitter", "editor"]
+categories = ["text-editors", "parsing"]
+
+# escriba-ts is the shipping tree-sitter host (GrammarRegistry + BufferParser +
+# highlight() + the builtin grammars). It brings the tree-sitter C runtime +
+# grammar C sources transitively, so hikari-ts is the ONE heavy/non-hermetic
+# crate — isolated here so hikari-core / hikari-token stay light. hikari-ts
+# names no tree-sitter type in its own API; it only maps escriba-ts's Semantic
+# result to hikari's HlClass.
+[dependencies]
+hikari-core = { version = "0.1", path = "../hikari-core" }
+hikari-token = { version = "0.1", path = "../hikari-token" }
+escriba-ts = "0.1.12"
+
+[dev-dependencies]
+hikari-core = { version = "0.1", path = "../hikari-core" }
+
+[lints]
+workspace = true
