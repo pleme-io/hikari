@@ -261,6 +261,150 @@ impl<L: LanguageLexer> Highlighter for LineDriven<L> {
     }
 }
 
+// ───────────────────── incremental line cache ───────────────────
+
+/// The object-safe incremental face the render layer holds as `Box<dyn>`. A
+/// stateful highlighter that reuses prior work: on each call it re-lexes only
+/// from the first content-changed line until the carried entry state
+/// re-converges (the `LineState` fixpoint), reusing every cached line before
+/// and after. Its output is **byte-identical** to the equivalent one-shot
+/// [`Highlighter::highlight`] — incrementality is an optimization, never a
+/// semantic change (the differential-equivalence invariant, fuzz-tested).
+pub trait IncrementalHighlighter: Send + Sync {
+    /// Re-highlight `text`, reusing cached per-line spans where the document
+    /// is unchanged. `&mut self` because the cache advances.
+    fn highlight(&mut self, text: &str) -> Vec<HighlightSpan>;
+
+    /// How many lines the most recent [`highlight`](Self::highlight) call
+    /// actually re-lexed — `0` on a fully-cached (idle re-render) call. The
+    /// seal's idle-work witness: an unchanged document re-lexes nothing.
+    fn last_relexed(&self) -> usize;
+}
+
+/// One cached line: the `LineState` carried *into* it, the state carried *out*
+/// of it, the exact line bytes (incl. trailing `\n`) for the content compare,
+/// and the line's spans stored **line-relative** (0-based) so a length change
+/// above never invalidates them — they are re-based to absolute on emit.
+struct CachedLine<S> {
+    entry: S,
+    exit: S,
+    text: Box<str>,
+    rel_spans: Vec<HighlightSpan>,
+}
+
+/// The incremental re-lex cache over any [`LanguageLexer`]. The `LineState`
+/// fixpoint made operational: re-lexing halts at the first line whose entry
+/// state *and* bytes both match the cache, so an edit costs
+/// `O(changed lines + lines until the carried state re-converges)`, not
+/// `O(document)`.
+///
+/// Zero-dependency by design (hikari-core's invariant): the content compare is
+/// std `str` equality and the cache stores the line bytes. A `hikari-*` sibling
+/// may swap the `Box<str>` for a BLAKE3 row hash to drop the O(document) memory
+/// — that is a strictly-internal change behind this same object-safe trait.
+pub struct LineCache<L: LanguageLexer> {
+    lexer: L,
+    lines: Vec<CachedLine<L::LineState>>,
+    last_relexed: usize,
+}
+
+impl<L: LanguageLexer> LineCache<L> {
+    #[must_use]
+    pub fn new(lexer: L) -> Self {
+        Self {
+            lexer,
+            lines: Vec::new(),
+            last_relexed: 0,
+        }
+    }
+
+    /// Lex one line at base offset 0 (line-relative spans) carrying `entry`.
+    fn lex_relative(&self, line: &str, entry: L::LineState) -> (L::LineState, Vec<HighlightSpan>) {
+        let line_len = u32::try_from(line.len()).unwrap_or(u32::MAX);
+        let mut sink = SpanSink::new(0, line_len);
+        let exit = self.lexer.lex_line(line, 0, entry, &mut sink);
+        (exit, sink.finish())
+    }
+}
+
+impl<L: LanguageLexer> IncrementalHighlighter for LineCache<L> {
+    fn highlight(&mut self, text: &str) -> Vec<HighlightSpan> {
+        let mut next: Vec<CachedLine<L::LineState>> = Vec::new();
+        let mut out: Vec<HighlightSpan> = Vec::new();
+        let mut entry = L::LineState::default();
+        let mut offset: u32 = 0;
+        let mut relexed = 0usize;
+
+        for (i, line) in text.split_inclusive('\n').enumerate() {
+            let line_len = u32::try_from(line.len()).unwrap_or(u32::MAX);
+            // Reuse iff the same-index cached line carried the same entry state
+            // AND holds the same bytes. Both must hold: same bytes with a
+            // different entry state (e.g. a block comment opened above) lexes
+            // differently, and the fixpoint is exactly "entry state matches".
+            let (exit, rel_spans) = match self.lines.get(i) {
+                Some(c) if c.entry == entry && &*c.text == line => (c.exit, c.rel_spans.clone()),
+                _ => {
+                    relexed += 1;
+                    self.lex_relative(line, entry)
+                }
+            };
+
+            // Re-base the line-relative spans to absolute document offsets.
+            for s in &rel_spans {
+                out.push(HighlightSpan {
+                    span: ByteSpan::new(offset + s.span.start, offset + s.span.end),
+                    class: s.class,
+                });
+            }
+            next.push(CachedLine {
+                entry,
+                exit,
+                text: line.into(),
+                rel_spans,
+            });
+            entry = exit;
+            offset = offset.saturating_add(line_len);
+        }
+
+        self.lines = next;
+        self.last_relexed = relexed;
+        out
+    }
+
+    fn last_relexed(&self) -> usize {
+        self.last_relexed
+    }
+}
+
+/// The total fallback: any [`Highlighter`] as an [`IncrementalHighlighter`] by
+/// re-lexing the whole document every call. Correct but not incremental — the
+/// default a backend gets when it does not carry a `LineState` cache (e.g. a
+/// tree-sitter backend that reparses via its own `Tree::edit`).
+pub struct WholeReHighlighter {
+    inner: Box<dyn Highlighter>,
+    last_relexed: usize,
+}
+
+impl WholeReHighlighter {
+    #[must_use]
+    pub fn new(inner: Box<dyn Highlighter>) -> Self {
+        Self {
+            inner,
+            last_relexed: 0,
+        }
+    }
+}
+
+impl IncrementalHighlighter for WholeReHighlighter {
+    fn highlight(&mut self, text: &str) -> Vec<HighlightSpan> {
+        self.last_relexed = text.split_inclusive('\n').count();
+        self.inner.highlight(text)
+    }
+    fn last_relexed(&self) -> usize {
+        self.last_relexed
+    }
+}
+
 // ───────────────────────── plugin + registry ────────────────────
 
 /// A language identity — an interned static name (closed by linkage, no open
@@ -286,6 +430,15 @@ pub trait LanguagePlugin: Send + Sync {
     fn language(&self) -> Language;
     fn selectors(&self) -> &'static [Selector];
     fn make_highlighter(&self) -> Box<dyn Highlighter>;
+
+    /// The incremental (line-cached) highlighter for this language. The default
+    /// wraps [`make_highlighter`](Self::make_highlighter) in a
+    /// [`WholeReHighlighter`] (correct, re-lexes the whole document); a
+    /// `LineState`-carrying backend overrides this to return a real
+    /// [`LineCache`] and gains the fixpoint re-lex for free.
+    fn make_incremental(&self) -> Box<dyn IncrementalHighlighter> {
+        Box::new(WholeReHighlighter::new(self.make_highlighter()))
+    }
 }
 
 /// The registry. Total resolution: an unmatched path resolves to
@@ -373,6 +526,28 @@ impl Ecosystem {
     #[must_use]
     pub fn highlighter_for_path(&self, path: &str) -> Box<dyn Highlighter> {
         self.highlighter_for(self.resolve(path))
+    }
+
+    /// An **incremental** highlighter for a language, or the plain-text
+    /// fallback. This is the call an editor's render loop holds across frames
+    /// — it re-lexes only what changed.
+    #[must_use]
+    pub fn incremental_highlighter_for(&self, lang: Language) -> Box<dyn IncrementalHighlighter> {
+        for p in &self.plugins {
+            if p.language() == lang {
+                return p.make_incremental();
+            }
+        }
+        Box::new(WholeReHighlighter::new(Box::new(PlainHighlighter)))
+    }
+
+    /// Path → incremental highlighter. The render-loop entry point.
+    #[must_use]
+    pub fn incremental_highlighter_for_path(
+        &self,
+        path: &str,
+    ) -> Box<dyn IncrementalHighlighter> {
+        self.incremental_highlighter_for(self.resolve(path))
     }
 }
 
@@ -723,6 +898,11 @@ pub mod langs {
         fn make_highlighter(&self) -> Box<dyn super::Highlighter> {
             Box::new(LineDriven::new(TableLexer { table: self.table }))
         }
+        fn make_incremental(&self) -> Box<dyn super::IncrementalHighlighter> {
+            // A real LineState-carrying cache — the table backend gains the
+            // fixpoint re-lex, not the whole-document fallback.
+            Box::new(super::LineCache::new(TableLexer { table: self.table }))
+        }
     }
 
     // ── the built-in language tables ──
@@ -911,5 +1091,108 @@ mod tests {
         let spans = h.highlight("hello");
         assert_eq!(spans.len(), 1);
         assert_eq!(spans[0].class, HlClass::Plain);
+    }
+
+    // ── incremental line cache (the LineState-fixpoint seal) ──
+
+    /// A tiny deterministic LCG so the differential fuzz is reproducible
+    /// without a `rand` dependency (hikari-core is zero-dep).
+    fn lcg(state: &mut u64) -> u64 {
+        *state = state
+            .wrapping_mul(6_364_136_223_846_793_005)
+            .wrapping_add(1_442_695_040_888_963_407);
+        *state >> 33
+    }
+
+    /// S5 seal — the load-bearing invariant: an incremental re-lex is
+    /// byte-identical to a one-shot re-lex, for every edit. Differential fuzz
+    /// over random insert/delete edits against a Rust-ish corpus.
+    #[test]
+    fn incremental_is_byte_identical_to_one_shot() {
+        let eco = Ecosystem::with_builtins();
+        let one_shot = eco.highlighter_for_path("f.rs");
+        let mut cache = eco.incremental_highlighter_for_path("f.rs");
+
+        let alphabet: Vec<char> = "fn xy=42;{}\n/*/ \"ab\"//c".chars().collect();
+        let mut text = String::from("fn main() {\n    let x = 1;\n}\n");
+        let mut seed = 0x1234_5678_9abc_def0u64;
+
+        for _ in 0..400 {
+            // Random edit: insert a char or delete one, at a random boundary.
+            let len = text.chars().count();
+            let at = if len == 0 {
+                0
+            } else {
+                (lcg(&mut seed) as usize) % (len + 1)
+            };
+            let byte_at = text.char_indices().nth(at).map_or(text.len(), |(b, _)| b);
+            if len > 4 && lcg(&mut seed) % 2 == 0 {
+                // delete one char
+                if let Some((b, c)) = text[byte_at..].char_indices().next() {
+                    let start = byte_at + b;
+                    text.replace_range(start..start + c.len_utf8(), "");
+                }
+            } else {
+                let c = alphabet[(lcg(&mut seed) as usize) % alphabet.len()];
+                text.insert(byte_at, c);
+            }
+
+            let inc = cache.highlight(&text);
+            let full = one_shot.highlight(&text);
+            assert_eq!(inc, full, "incremental != one-shot for {text:?}");
+            covers(&text, &inc);
+        }
+    }
+
+    /// S6 seal — an unchanged document re-lexes NOTHING on the second call.
+    #[test]
+    fn idle_rehighlight_relexes_zero_lines() {
+        let eco = Ecosystem::with_builtins();
+        let mut cache = eco.incremental_highlighter_for_path("f.rs");
+        let text = "fn a() {}\nfn b() {}\nfn c() {}\n";
+        let _ = cache.highlight(text);
+        let _ = cache.highlight(text); // idle re-render
+        assert_eq!(cache.last_relexed(), 0, "idle re-render must re-lex nothing");
+    }
+
+    /// The fixpoint: a one-line edit re-lexes only the lines up to where the
+    /// carried `LineState` re-converges — here, a leaf edit re-lexes just its
+    /// own line, not the whole 60-line document.
+    #[test]
+    fn single_line_edit_relexes_locally() {
+        let eco = Ecosystem::with_builtins();
+        let mut cache = eco.incremental_highlighter_for_path("f.rs");
+        let mut text = String::new();
+        for i in 0..60 {
+            text.push_str(&format!("let v{i} = {i};\n"));
+        }
+        let _ = cache.highlight(&text); // prime: 60 lines lexed
+        // Edit line 30's value only (no block-comment/string state crosses).
+        let edited = text.replacen("let v30 = 30;", "let v30 = 999;", 1);
+        let _ = cache.highlight(&edited);
+        assert_eq!(
+            cache.last_relexed(),
+            1,
+            "a local edit must re-lex exactly its own line (state re-converges immediately)"
+        );
+    }
+
+    /// A block comment opened mid-document propagates: re-lex continues past
+    /// the edited line until the carried state re-converges (here, the `*/`).
+    #[test]
+    fn cross_line_state_change_propagates_then_converges() {
+        let eco = Ecosystem::with_builtins();
+        let mut cache = eco.incremental_highlighter_for_path("f.rs");
+        let text = "let a = 1;\nlet b = 2;\nlet c = 3;\nlet d = 4;\n";
+        let _ = cache.highlight(text);
+        // Open a block comment on line 0 that closes on line 2.
+        let edited = "let a = 1; /*\nstill comment\n*/ let c = 3;\nlet d = 4;\n";
+        let inc = cache.highlight(edited);
+        assert_eq!(inc, eco.highlighter_for_path("f.rs").highlight(edited));
+        // Lines 0..=2 re-lexed (state in flight); line 3 reused (state reconverged).
+        assert!(
+            cache.last_relexed() <= 3,
+            "re-lex must stop once the block comment closes and state reconverges"
+        );
     }
 }

@@ -11,14 +11,24 @@ doc + roadmap: [`theory/HIKARI.md`](https://github.com/pleme-io/theory/blob/main
 ## Layout
 
 - `crates/hikari-core` — the spine: `ByteSpan`/`HlClass`/`SpanSink`,
-  `LanguageLexer`/`LineDriven`/`Highlighter`, `Ecosystem`/`LanguagePlugin`,
-  `Theme`, and the batteries-included table backend (Rust/Python/Lisp/JSON/
-  TOML/Markdown). **Zero dependencies** — heavy backends ship as sibling
-  `hikari-*` crates.
+  `LanguageLexer`/`LineDriven`/`Highlighter`, the incremental
+  `IncrementalHighlighter`/`LineCache` (the `LineState`-fixpoint re-lex),
+  `Ecosystem`/`LanguagePlugin`, `Theme`, and the batteries-included table
+  backend (Rust/Python/Lisp/JSON/TOML/Markdown). **Zero dependencies** — heavy
+  backends ship as sibling `hikari-*` crates.
+- `crates/hikari-token` — the palette-independent `Semantic` collapse
+  (16 variants) + total `From<Semantic> for HlClass` + `hlclass_to_semantic`;
+  `schema` feature. The fleet's shared token vocabulary (escriba, caixa, AsterIDE
+  all `pub use` this — no duplicated `Semantic`).
+- `crates/hikari-ts` — the tree-sitter backend: `TreeSitterHighlighter` over
+  `escriba-ts` funneled through `SpanSink::for_document`, `language_matrix.rs`
+  forcing-function.
 
-Roadmap members (not yet landed): `hikari-ts` (tree-sitter), `hikari-token`
-(the shared `Semantic`/`HlClass` collapse), `hikari-theme` (ishou-sourced),
-`hikari-lang-*` (fleet-owned lexer adapters), `hikari-wasm-host`.
+All three publish to crates.io on merge (currently 0.1.x).
+
+Roadmap members (not yet landed): `hikari-theme` (ishou-sourced palette),
+`hikari-lang-*` (fleet-owned lexer adapters, e.g. `hikari-lang-zsh` absorbing
+frost), `hikari-wasm-host`.
 
 ## Build / test
 
