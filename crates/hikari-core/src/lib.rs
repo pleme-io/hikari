@@ -112,6 +112,15 @@ pub enum HlClass {
     Hyperlink,
     Whitespace,
     Error,
+    /// A diagnostic/severity class (LSP + the fleet `Semantic` collapse).
+    Warning,
+    Info,
+    Hint,
+    /// A diff class (git signs, review UIs).
+    Added,
+    Removed,
+    /// Diff context / normal-fg text in a diff view.
+    Unchanged,
     /// The default / unclassified class. Coverage gaps are filled with this.
     Plain,
 }
@@ -139,12 +148,24 @@ pub struct SpanSink {
 }
 
 impl SpanSink {
-    fn new(line_start: u32, line_len: u32) -> Self {
+    /// A sink covering `[line_start, line_start + line_len)`. Public so a
+    /// direct [`Highlighter`] impl (e.g. a tree-sitter backend) can construct
+    /// one and keep coverage-by-construction, not only the [`LineDriven`]
+    /// bridge.
+    #[must_use]
+    pub fn new(line_start: u32, line_len: u32) -> Self {
         Self {
             cursor: line_start,
             line_end: line_start + line_len,
             out: Vec::new(),
         }
+    }
+
+    /// A sink covering a whole document `[0, len)` — for a non-line backend
+    /// that pushes absolute offsets and wants gap-fill for free.
+    #[must_use]
+    pub fn for_document(len: u32) -> Self {
+        Self::new(0, len)
     }
 
     /// Classify `[start, end)` (absolute byte offsets) as `class`. A gap
@@ -169,7 +190,10 @@ impl SpanSink {
         self.cursor = end;
     }
 
-    fn finish(mut self) -> Vec<HighlightSpan> {
+    /// Finish: fill any trailing gap with [`HlClass::Plain`] and return the
+    /// coverage-complete, non-overlapping, forward-only partition.
+    #[must_use]
+    pub fn finish(mut self) -> Vec<HighlightSpan> {
         if self.cursor < self.line_end {
             self.out.push(HighlightSpan {
                 span: ByteSpan::new(self.cursor, self.line_end),
@@ -413,8 +437,14 @@ impl Theme for NordTheme {
             HlClass::Operator => Rgb::new(0x81, 0xA1, 0xC1),
             HlClass::Punctuation => Rgb::new(0xEC, 0xEF, 0xF4),
             HlClass::Hyperlink => Rgb::new(0x5E, 0x81, 0xAC),
-            HlClass::Error => Rgb::new(0xBF, 0x61, 0x6A),
-            HlClass::Variable | HlClass::Whitespace | HlClass::Plain => Rgb::new(0xD8, 0xDE, 0xE9),
+            HlClass::Error | HlClass::Removed => Rgb::new(0xBF, 0x61, 0x6A),
+            HlClass::Warning => Rgb::new(0xEB, 0xCB, 0x8B),
+            HlClass::Info => Rgb::new(0x81, 0xA1, 0xC1),
+            HlClass::Hint => Rgb::new(0x5E, 0x81, 0xAC),
+            HlClass::Added => Rgb::new(0xA3, 0xBE, 0x8C),
+            HlClass::Variable | HlClass::Whitespace | HlClass::Unchanged | HlClass::Plain => {
+                Rgb::new(0xD8, 0xDE, 0xE9)
+            }
         }
     }
 }

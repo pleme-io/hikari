@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/hikari-core"]
+members = ["crates/hikari-core", "crates/hikari-token"]
 
 [workspace.package]
 version = "0.1.1"

@@ -1,0 +1,27 @@
+[package]
+name = "hikari-token"
+description = "hikari (光) — the one fleet-facing semantic highlight vocabulary. A 16-variant `Semantic` enum (the collapse of the fleet's duplicated copies) with total conversions to/from hikari-core's `HlClass`. Re-exports HlClass/ByteSpan/HighlightSpan so a consumer takes one dep."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme = "../../README.md"
+keywords = ["syntax", "highlighting", "semantic", "editor", "theme"]
+categories = ["text-editors"]
+
+[dependencies]
+hikari-core = { version = "0.1", path = "../hikari-core" }
+serde = { version = "1", features = ["derive"] }
+schemars = { version = "0.8", optional = true }
+
+[features]
+# Feature-gated JsonSchema so consumers that derive OpenAPI (e.g. escriba-api)
+# opt in, while lean consumers (caixa-theme) take the light build.
+schema = ["dep:schemars"]
+
+[dev-dependencies]
+serde_json = "1"
+
+[lints]
+workspace = true
