@@ -1,0 +1,21 @@
+[package]
+name = "hikari-core"
+description = "hikari (光) — the pluggable syntax-highlighting spine: a coverage-complete span model, a line-stateful lexer trait, an object-safe highlighter, and a batteries-included language registry (Rust/Python/Lisp/JSON/TOML/Markdown)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme = "../../README.md"
+keywords = ["syntax", "highlighting", "lexer", "editor", "tokenizer"]
+categories = ["text-editors", "parsing"]
+
+# Zero dependencies by design: the spine + hand-rolled table lexers are
+# std-only, so any consumer (an egui/GPU editor, a TUI, a CLI) vendors it with
+# no transitive weight and no fragile inputs. Backends that DO need heavy deps
+# (tree-sitter grammars, the macro-generated (deflexer) output) ship as
+# separate hikari-* crates in this workspace — see the design doc.
+[dependencies]
+
+[lints]
+workspace = true

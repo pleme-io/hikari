@@ -1,0 +1,33 @@
+name: auto-release
+
+# AUTOBUMP + AUTO-RELEASE for the hikari Rust workspace.
+#
+# On every merge to main: bump the workspace version, regenerate lock/nix
+# artifacts, commit + tag v<X.Y.Z>, and publish every workspace member to
+# crates.io in dependency order (hikari-core today; hikari-ts / hikari-token /
+# … as they land). Patch bump by default; minor/major via workflow_dispatch.
+#
+# Calls the per-language reusable directly (the polymorphic auto-release.yml
+# shim is a documented startup-failure; the direct call is the fleet-wide
+# workaround). The crates.io publish is secret-gated on CRATES_API_TOKEN
+# (inherited from org secrets); absent → build runs, publish is a no-op notice.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump-type:
+        description: "patch | minor | major"
+        required: false
+        default: patch
+
+jobs:
+  release:
+    uses: pleme-io/substrate/.github/workflows/rust-auto-release.yml@main
+    with:
+      bump-type: ${{ inputs.bump-type || 'patch' }}
+    secrets: inherit
+    permissions:
+      contents: write
+      packages: write
