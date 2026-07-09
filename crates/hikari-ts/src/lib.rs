@@ -119,27 +119,6 @@ impl GrammarRegistry {
             &["sh", "bash", "zsh"],
         )?;
         reg.register(
-            "javascript",
-            &tree_sitter_javascript::language(),
-            tree_sitter_javascript::HIGHLIGHT_QUERY,
-            tree_sitter_javascript::INJECTIONS_QUERY,
-            &["js", "jsx", "mjs", "cjs"],
-        )?;
-        reg.register(
-            "typescript",
-            &tree_sitter_typescript::language_typescript(),
-            tree_sitter_typescript::HIGHLIGHTS_QUERY,
-            "",
-            &["ts", "mts", "cts"],
-        )?;
-        reg.register(
-            "tsx",
-            &tree_sitter_typescript::language_tsx(),
-            tree_sitter_typescript::HIGHLIGHTS_QUERY,
-            "",
-            &["tsx"],
-        )?;
-        reg.register(
             "go",
             &tree_sitter_go::language(),
             tree_sitter_go::HIGHLIGHTS_QUERY,

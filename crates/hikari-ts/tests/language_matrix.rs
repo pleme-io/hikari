@@ -33,18 +33,6 @@ const MATRIX: &[Row] = &[
         sample: "echo \"hi\" # note\n",
     },
     Row {
-        grammar: "javascript",
-        sample: "function f(x) { return 42; }\n",
-    },
-    Row {
-        grammar: "typescript",
-        sample: "function f(x: number): number { return 42; }\n",
-    },
-    Row {
-        grammar: "tsx",
-        sample: "const n: number = 42;\n",
-    },
-    Row {
         grammar: "go",
         sample: "package main\nfunc main() { x := 42 }\n",
     },

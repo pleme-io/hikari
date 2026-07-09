@@ -24,8 +24,9 @@ tree-sitter-rust = "0.21"
 tree-sitter-python = "0.21"
 tree-sitter-json = "0.21"
 tree-sitter-bash = "0.21"
-tree-sitter-javascript = "0.21"
-tree-sitter-typescript = "0.21"
+# NOTE: tree-sitter-javascript/typescript pin `cc ~1.0.90` (caps at cc 1.0.x),
+# which conflicts with consumers on blake3 ≥ 1.1 (e.g. escriba). Re-add once the
+# grammar loosens its cc build-dep or on a tree-sitter-0.23 migration.
 tree-sitter-go = "0.21"
 tree-sitter-c = "0.21"
 tree-sitter-cpp = "0.22"
