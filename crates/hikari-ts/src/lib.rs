@@ -79,38 +79,76 @@ pub struct GrammarRegistry {
 }
 
 impl GrammarRegistry {
-    /// Build the built-in registry (Rust today; more grammars land here).
+    /// Build the built-in registry — the go-wide grammar set. Adding a grammar
+    /// is one [`register`](Self::register) line + one `language_matrix` row.
     ///
     /// # Errors
     /// Returns [`TsError::Ts`] if a grammar's highlight query fails to compile.
     pub fn builtin() -> Result<Self> {
         let highlight_names = canonical_highlight_names();
-        let mut grammars = HashMap::new();
-
-        let lang: TsLanguage = tree_sitter_rust::language();
-        let mut cfg = HighlightConfiguration::new(
-            lang.clone(),
+        let mut reg = Self {
+            grammars: HashMap::new(),
+            highlight_names,
+        };
+        reg.register(
             "rust",
+            &tree_sitter_rust::language(),
             tree_sitter_rust::HIGHLIGHTS_QUERY,
             tree_sitter_rust::INJECTIONS_QUERY,
+            &["rs"],
+        )?;
+        reg.register(
+            "python",
+            &tree_sitter_python::language(),
+            tree_sitter_python::HIGHLIGHTS_QUERY,
             "",
-        )
-        .map_err(|e| TsError::Ts(format!("rust: {e}")))?;
-        cfg.configure(&highlight_names);
-        grammars.insert(
-            "rust".to_string(),
+            &["py", "pyi"],
+        )?;
+        reg.register(
+            "json",
+            &tree_sitter_json::language(),
+            tree_sitter_json::HIGHLIGHTS_QUERY,
+            "",
+            &["json"],
+        )?;
+        reg.register(
+            "bash",
+            &tree_sitter_bash::language(),
+            tree_sitter_bash::HIGHLIGHT_QUERY,
+            "",
+            &["sh", "bash", "zsh"],
+        )?;
+        Ok(reg)
+    }
+
+    /// Register one grammar: compile its highlight config against the canonical
+    /// name space and insert it under `name` claiming `extensions`. The one
+    /// repeated shape, factored out so adding a grammar is a single call.
+    ///
+    /// # Errors
+    /// Returns [`TsError::Ts`] if the highlight query fails to compile.
+    fn register(
+        &mut self,
+        name: &str,
+        language: &TsLanguage,
+        highlights: &str,
+        injections: &str,
+        extensions: &[&str],
+    ) -> Result<()> {
+        let mut cfg =
+            HighlightConfiguration::new(language.clone(), name, highlights, injections, "")
+                .map_err(|e| TsError::Ts(format!("{name}: {e}")))?;
+        cfg.configure(&self.highlight_names);
+        self.grammars.insert(
+            name.to_string(),
             Grammar {
-                name: "rust".to_string(),
-                language: lang,
+                name: name.to_string(),
+                language: language.clone(),
                 config: cfg,
-                extensions: vec!["rs".to_string()],
+                extensions: extensions.iter().map(|s| (*s).to_string()).collect(),
             },
         );
-
-        Ok(Self {
-            grammars,
-            highlight_names,
-        })
+        Ok(())
     }
 
     #[must_use]

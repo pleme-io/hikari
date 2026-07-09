@@ -19,7 +19,11 @@ hikari-core = { version = "0.1", path = "../hikari-core" }
 hikari-token = { version = "0.1", path = "../hikari-token" }
 tree-sitter = "0.22"
 tree-sitter-highlight = "0.22"
+# Grammars — the go-wide set (ABI-compatible with tree-sitter 0.22).
 tree-sitter-rust = "0.21"
+tree-sitter-python = "0.21"
+tree-sitter-json = "0.21"
+tree-sitter-bash = "0.21"
 serde = { version = "1", features = ["derive"] }
 thiserror = "1"
 

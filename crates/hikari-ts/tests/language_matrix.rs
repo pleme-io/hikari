@@ -15,10 +15,24 @@ struct Row {
     sample: &'static str,
 }
 
-const MATRIX: &[Row] = &[Row {
-    grammar: "rust",
-    sample: "fn main() { let x = 42; }",
-}];
+const MATRIX: &[Row] = &[
+    Row {
+        grammar: "rust",
+        sample: "fn main() { let x = 42; }",
+    },
+    Row {
+        grammar: "python",
+        sample: "def f(x):\n    return 42\n",
+    },
+    Row {
+        grammar: "json",
+        sample: "{\"a\": 1, \"b\": true}\n",
+    },
+    Row {
+        grammar: "bash",
+        sample: "echo \"hi\" # note\n",
+    },
+];
 
 #[test]
 fn every_grammar_has_a_row() {
