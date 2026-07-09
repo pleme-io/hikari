@@ -118,6 +118,77 @@ impl GrammarRegistry {
             "",
             &["sh", "bash", "zsh"],
         )?;
+        reg.register(
+            "javascript",
+            &tree_sitter_javascript::language(),
+            tree_sitter_javascript::HIGHLIGHT_QUERY,
+            tree_sitter_javascript::INJECTIONS_QUERY,
+            &["js", "jsx", "mjs", "cjs"],
+        )?;
+        reg.register(
+            "typescript",
+            &tree_sitter_typescript::language_typescript(),
+            tree_sitter_typescript::HIGHLIGHTS_QUERY,
+            "",
+            &["ts", "mts", "cts"],
+        )?;
+        reg.register(
+            "tsx",
+            &tree_sitter_typescript::language_tsx(),
+            tree_sitter_typescript::HIGHLIGHTS_QUERY,
+            "",
+            &["tsx"],
+        )?;
+        reg.register(
+            "go",
+            &tree_sitter_go::language(),
+            tree_sitter_go::HIGHLIGHTS_QUERY,
+            "",
+            &["go"],
+        )?;
+        reg.register(
+            "c",
+            &tree_sitter_c::language(),
+            tree_sitter_c::HIGHLIGHT_QUERY,
+            "",
+            &["c", "h"],
+        )?;
+        // C++ extends C: its own highlight query holds only the cpp-specific
+        // additions, so a `.cpp` file's plain-C syntax needs the base C query
+        // too. Concatenate them (tree-sitter-cpp is designed for this).
+        let cpp_hl = format!(
+            "{}\n{}",
+            tree_sitter_c::HIGHLIGHT_QUERY,
+            tree_sitter_cpp::HIGHLIGHT_QUERY,
+        );
+        reg.register(
+            "cpp",
+            &tree_sitter_cpp::language(),
+            &cpp_hl,
+            "",
+            &["cpp", "cc", "cxx", "hpp", "hh"],
+        )?;
+        reg.register(
+            "css",
+            &tree_sitter_css::language(),
+            tree_sitter_css::HIGHLIGHTS_QUERY,
+            "",
+            &["css", "scss"],
+        )?;
+        reg.register(
+            "html",
+            &tree_sitter_html::language(),
+            tree_sitter_html::HIGHLIGHTS_QUERY,
+            tree_sitter_html::INJECTIONS_QUERY,
+            &["html", "htm"],
+        )?;
+        reg.register(
+            "ruby",
+            &tree_sitter_ruby::language(),
+            tree_sitter_ruby::HIGHLIGHTS_QUERY,
+            "",
+            &["rb"],
+        )?;
         Ok(reg)
     }
 

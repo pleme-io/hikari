@@ -32,6 +32,42 @@ const MATRIX: &[Row] = &[
         grammar: "bash",
         sample: "echo \"hi\" # note\n",
     },
+    Row {
+        grammar: "javascript",
+        sample: "function f(x) { return 42; }\n",
+    },
+    Row {
+        grammar: "typescript",
+        sample: "function f(x: number): number { return 42; }\n",
+    },
+    Row {
+        grammar: "tsx",
+        sample: "const n: number = 42;\n",
+    },
+    Row {
+        grammar: "go",
+        sample: "package main\nfunc main() { x := 42 }\n",
+    },
+    Row {
+        grammar: "c",
+        sample: "int main(void) { return 42; }\n",
+    },
+    Row {
+        grammar: "cpp",
+        sample: "int main() { return 42; }\n",
+    },
+    Row {
+        grammar: "css",
+        sample: "body { color: red; }\n",
+    },
+    Row {
+        grammar: "html",
+        sample: "<div class=\"x\">hi</div>\n",
+    },
+    Row {
+        grammar: "ruby",
+        sample: "def f(x)\n  42\nend\n",
+    },
 ];
 
 #[test]

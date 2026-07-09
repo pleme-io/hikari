@@ -24,6 +24,16 @@ tree-sitter-rust = "0.21"
 tree-sitter-python = "0.21"
 tree-sitter-json = "0.21"
 tree-sitter-bash = "0.21"
+tree-sitter-javascript = "0.21"
+tree-sitter-typescript = "0.21"
+tree-sitter-go = "0.21"
+tree-sitter-c = "0.21"
+tree-sitter-cpp = "0.22"
+tree-sitter-css = "0.21"
+tree-sitter-html = "0.20"
+tree-sitter-ruby = "0.21"
+# (TOML stays on the zero-dep table backend — tree-sitter-toml-ng pins a newer
+# `cc` that conflicts with the 0.21-era grammars; not worth the split.)
 serde = { version = "1", features = ["derive"] }
 thiserror = "1"
 
