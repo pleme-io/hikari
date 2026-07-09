@@ -35,11 +35,11 @@ checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
 
 [[package]]
 name = "hikari-core"
-version = "0.1.7"
+version = "0.1.8"
 
 [[package]]
 name = "hikari-token"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "hikari-core",
  "schemars",
@@ -49,7 +49,7 @@ dependencies = [
 
 [[package]]
 name = "hikari-ts"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "hikari-core",
  "hikari-token",
