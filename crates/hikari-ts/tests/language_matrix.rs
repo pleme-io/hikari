@@ -1,6 +1,6 @@
 //! The version-coherence + coverage forcing-function.
 //!
-//! Every tree-sitter grammar escriba-ts registers MUST have a row here. If a
+//! Every tree-sitter grammar hikari-ts registers MUST have a row here. If a
 //! new grammar is added upstream and no row is added, `every_grammar_has_a_row`
 //! fails the build — the guard that keeps the runtime ABI + the capture→HlClass
 //! intent coherent as the go-wide language set grows (HIKARI.md §V).
@@ -30,7 +30,7 @@ fn every_grammar_has_a_row() {
         .collect();
     assert!(
         missing.is_empty(),
-        "grammars registered by escriba-ts but missing a language_matrix row \
+        "grammars registered by hikari-ts but missing a language_matrix row \
          (add a Row + its capture→HlClass intent): {missing:?}",
     );
 }
