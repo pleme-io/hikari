@@ -937,9 +937,20 @@ pub mod langs {
     };
     static PY_SEL: &[Selector] = &[Selector::Extension("py")];
 
+    // tatara-lisp is the fleet's own dialect, so its high-frequency heads earn
+    // their place here alongside the generic Lisp ones. Counts are corpus
+    // occurrences over the 1121 .tlisp/.lisp files under ~/code/github/pleme-io
+    // (measured 2026-07-29): `define` 2395, `defsubcmd` 671, `defalias` 583,
+    // `defcaixa` 274. The evaluator's special forms (`define`, `lambda`, `let`,
+    // `if`, `cond`, `quote`, `set!`, `begin`) can never come from the domain
+    // registry — they are a closed hardcoded match in
+    // tatara-lisp-eval/src/special.rs — so a table backend is exactly the right
+    // home for them.
     static LISP_KW: &[&str] = &[
-        "def", "defn", "defmacro", "defcaixa", "deflexer", "let", "lambda", "fn", "if", "cond",
-        "when", "unless", "do", "quote",
+        "def", "defn", "defmacro", "defcaixa", "deflexer", "define", "defun", "defmodule",
+        "defsuite", "deftest", "let", "let*", "letrec", "lambda", "fn", "if", "cond", "case",
+        "when", "unless", "do", "begin", "quote", "quasiquote", "unquote", "set!", "and", "or",
+        "not", "import", "importar",
     ];
     static LISP_TABLE: LangTable = LangTable {
         keywords: LISP_KW,
@@ -950,6 +961,11 @@ pub mod langs {
     };
     static LISP_SEL: &[Selector] = &[
         Selector::Extension("lisp"),
+        // `.tlisp` is tatara-lisp's script extension — 571 files in the fleet,
+        // every one of which resolved to NO language before this line, so the
+        // editor painted them as plain text. The omission was invisible
+        // because `.lisp` (550 files) did resolve.
+        Selector::Extension("tlisp"),
         Selector::Extension("lsp"),
         Selector::Extension("el"),
         Selector::Extension("scm"),
@@ -1047,6 +1063,7 @@ mod tests {
             ("a.rs", "fn main() {\n    let x = 42; // hi\n}\n"),
             ("b.py", "def f(x):\n    return \"s\"  # c\n"),
             ("c.lisp", "(defcaixa :name \"x\" 42) ; c\n"),
+            ("c.tlisp", "(define f (lambda (x) \"s\")) ; c\n"),
             ("d.txt", "no language here\n"),
         ] {
             let h = eco.highlighter_for_path(path);
@@ -1061,6 +1078,10 @@ mod tests {
         assert_eq!(eco.resolve("src/main.rs"), Language("rust"));
         assert_eq!(eco.resolve("app.py"), Language("python"));
         assert_eq!(eco.resolve("x.lisp"), Language("lisp"));
+        // tatara-lisp's script extension. 571 fleet files resolved to no
+        // language at all before this was added; pin it so it cannot regress.
+        assert_eq!(eco.resolve("x.tlisp"), Language("lisp"));
+        assert_eq!(eco.resolve("tools/check.tlisp"), Language("lisp"));
         assert_eq!(eco.resolve("Cargo.lock"), Language("toml"));
         // The bug: a non-Rust file must NOT resolve to rust.
         assert_eq!(eco.resolve("notes.txt"), PLAIN_TEXT);
