@@ -543,10 +543,7 @@ impl Ecosystem {
 
     /// Path → incremental highlighter. The render-loop entry point.
     #[must_use]
-    pub fn incremental_highlighter_for_path(
-        &self,
-        path: &str,
-    ) -> Box<dyn IncrementalHighlighter> {
+    pub fn incremental_highlighter_for_path(&self, path: &str) -> Box<dyn IncrementalHighlighter> {
         self.incremental_highlighter_for(self.resolve(path))
     }
 }
@@ -947,10 +944,37 @@ pub mod langs {
     // tatara-lisp-eval/src/special.rs — so a table backend is exactly the right
     // home for them.
     static LISP_KW: &[&str] = &[
-        "def", "defn", "defmacro", "defcaixa", "deflexer", "define", "defun", "defmodule",
-        "defsuite", "deftest", "let", "let*", "letrec", "lambda", "fn", "if", "cond", "case",
-        "when", "unless", "do", "begin", "quote", "quasiquote", "unquote", "set!", "and", "or",
-        "not", "import", "importar",
+        "def",
+        "defn",
+        "defmacro",
+        "defcaixa",
+        "deflexer",
+        "define",
+        "defun",
+        "defmodule",
+        "defsuite",
+        "deftest",
+        "let",
+        "let*",
+        "letrec",
+        "lambda",
+        "fn",
+        "if",
+        "cond",
+        "case",
+        "when",
+        "unless",
+        "do",
+        "begin",
+        "quote",
+        "quasiquote",
+        "unquote",
+        "set!",
+        "and",
+        "or",
+        "not",
+        "import",
+        "importar",
     ];
     static LISP_TABLE: LangTable = LangTable {
         keywords: LISP_KW,
@@ -1173,7 +1197,11 @@ mod tests {
         let text = "fn a() {}\nfn b() {}\nfn c() {}\n";
         let _ = cache.highlight(text);
         let _ = cache.highlight(text); // idle re-render
-        assert_eq!(cache.last_relexed(), 0, "idle re-render must re-lex nothing");
+        assert_eq!(
+            cache.last_relexed(),
+            0,
+            "idle re-render must re-lex nothing"
+        );
     }
 
     /// The fixpoint: a one-line edit re-lexes only the lines up to where the

@@ -1,0 +1,1268 @@
+{
+  "schema_version": 2,
+  "cargo_lock_sha256": "4b8222dd9d736106ebd7c6ff002fc19bf466ec2c586fdf3cade78630a974ba33",
+  "manifest_sha256": {
+    "Cargo.toml": "1d1365172f8bbcd24a3b7006915658da9ad3855c396b02e5e261b92318dd22ea",
+    "crates/hikari-core/Cargo.toml": "894d42ee864b753eeec7e6d700624f8d1a805d4d31c96a806ea02f57a4eb2e9d",
+    "crates/hikari-token/Cargo.toml": "5035a2e9e3613df28cdbc1885ecc31671a973d88760470d840d3171ff3ecd090",
+    "crates/hikari-ts/Cargo.toml": "97c1e2a32425ddef262f5d3a7fb262c73881fe612b5011f86737c599094911bf"
+  },
+  "target_resolves": {
+    "base": {
+      "aho-corasick-1.1.4": {
+        "runtime_dependencies": [
+          {
+            "name": "memchr",
+            "package_key": "memchr-2.8.3",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "perf-literal",
+          "std"
+        ]
+      },
+      "cc-1.2.66": {
+        "runtime_dependencies": [
+          {
+            "name": "find_msvc_tools",
+            "package_key": "find-msvc-tools-0.1.9",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "shlex",
+            "package_key": "shlex-2.0.1",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "find-msvc-tools-0.1.9": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      },
+      "hikari-core-0.1.9": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      },
+      "hikari-token-0.1.9": {
+        "runtime_dependencies": [
+          {
+            "name": "hikari_core",
+            "package_key": "hikari-core-0.1.9",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "serde",
+            "package_key": "serde-1.0.228",
+            "kind": "normal",
+            "features": [
+              "derive"
+            ],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "hikari-ts-0.1.9": {
+        "runtime_dependencies": [
+          {
+            "name": "hikari_core",
+            "package_key": "hikari-core-0.1.9",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "hikari_token",
+            "package_key": "hikari-token-0.1.9",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "serde",
+            "package_key": "serde-1.0.228",
+            "kind": "normal",
+            "features": [
+              "derive"
+            ],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "thiserror",
+            "package_key": "thiserror-1.0.69",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_bash",
+            "package_key": "tree-sitter-bash-0.21.0",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_c",
+            "package_key": "tree-sitter-c-0.21.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_cpp",
+            "package_key": "tree-sitter-cpp-0.22.3",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_css",
+            "package_key": "tree-sitter-css-0.21.1",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_go",
+            "package_key": "tree-sitter-go-0.21.2",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_highlight",
+            "package_key": "tree-sitter-highlight-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_html",
+            "package_key": "tree-sitter-html-0.20.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_json",
+            "package_key": "tree-sitter-json-0.21.0",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_python",
+            "package_key": "tree-sitter-python-0.21.0",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_ruby",
+            "package_key": "tree-sitter-ruby-0.21.0",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter_rust",
+            "package_key": "tree-sitter-rust-0.21.2",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "itoa-1.0.18": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      },
+      "lazy_static-1.5.0": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      },
+      "memchr-2.8.3": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": [
+          "alloc",
+          "std"
+        ]
+      },
+      "proc-macro2-1.0.106": {
+        "runtime_dependencies": [
+          {
+            "name": "unicode_ident",
+            "package_key": "unicode-ident-1.0.24",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "proc-macro"
+        ]
+      },
+      "quote-1.0.46": {
+        "runtime_dependencies": [
+          {
+            "name": "proc_macro2",
+            "package_key": "proc-macro2-1.0.106",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "proc-macro"
+        ]
+      },
+      "regex-1.12.4": {
+        "runtime_dependencies": [
+          {
+            "name": "aho_corasick",
+            "package_key": "aho-corasick-1.1.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "memchr",
+            "package_key": "memchr-2.8.3",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "regex_automata",
+            "package_key": "regex-automata-0.4.14",
+            "kind": "normal",
+            "features": [
+              "alloc",
+              "meta",
+              "nfa-pikevm",
+              "syntax"
+            ],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "regex_syntax",
+            "package_key": "regex-syntax-0.8.11",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "perf",
+          "perf-backtrack",
+          "perf-cache",
+          "perf-dfa",
+          "perf-inline",
+          "perf-literal",
+          "perf-onepass",
+          "std",
+          "unicode",
+          "unicode-age",
+          "unicode-bool",
+          "unicode-case",
+          "unicode-gencat",
+          "unicode-perl",
+          "unicode-script",
+          "unicode-segment"
+        ]
+      },
+      "regex-automata-0.4.14": {
+        "runtime_dependencies": [
+          {
+            "name": "aho_corasick",
+            "package_key": "aho-corasick-1.1.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "memchr",
+            "package_key": "memchr-2.8.3",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "regex_syntax",
+            "package_key": "regex-syntax-0.8.11",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "alloc",
+          "dfa-onepass",
+          "hybrid",
+          "meta",
+          "nfa-backtrack",
+          "nfa-pikevm",
+          "nfa-thompson",
+          "perf-inline",
+          "perf-literal",
+          "perf-literal-multisubstring",
+          "perf-literal-substring",
+          "std",
+          "syntax",
+          "unicode",
+          "unicode-age",
+          "unicode-bool",
+          "unicode-case",
+          "unicode-gencat",
+          "unicode-perl",
+          "unicode-script",
+          "unicode-segment",
+          "unicode-word-boundary"
+        ]
+      },
+      "regex-syntax-0.8.11": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "std",
+          "unicode",
+          "unicode-age",
+          "unicode-bool",
+          "unicode-case",
+          "unicode-gencat",
+          "unicode-perl",
+          "unicode-script",
+          "unicode-segment"
+        ]
+      },
+      "serde-1.0.228": {
+        "runtime_dependencies": [
+          {
+            "name": "serde_core",
+            "package_key": "serde_core-1.0.228",
+            "kind": "normal",
+            "features": [
+              "result"
+            ],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "serde_derive",
+            "package_key": "serde_derive-1.0.228",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": true,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "derive",
+          "serde_derive",
+          "std"
+        ]
+      },
+      "serde_core-1.0.228": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": [
+          "result",
+          "std"
+        ]
+      },
+      "serde_derive-1.0.228": {
+        "runtime_dependencies": [
+          {
+            "name": "proc_macro2",
+            "package_key": "proc-macro2-1.0.106",
+            "kind": "normal",
+            "features": [
+              "proc-macro"
+            ],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "quote",
+            "package_key": "quote-1.0.46",
+            "kind": "normal",
+            "features": [
+              "proc-macro"
+            ],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "syn",
+            "package_key": "syn-2.0.118",
+            "kind": "normal",
+            "features": [
+              "clone-impls",
+              "derive",
+              "parsing",
+              "printing",
+              "proc-macro"
+            ],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default"
+        ]
+      },
+      "serde_json-1.0.150": {
+        "runtime_dependencies": [
+          {
+            "name": "itoa",
+            "package_key": "itoa-1.0.18",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "memchr",
+            "package_key": "memchr-2.8.3",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "serde_core",
+            "package_key": "serde_core-1.0.228",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "zmij",
+            "package_key": "zmij-1.0.21",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "std"
+        ]
+      },
+      "shlex-2.0.1": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": [
+          "default",
+          "std"
+        ]
+      },
+      "syn-2.0.118": {
+        "runtime_dependencies": [
+          {
+            "name": "proc_macro2",
+            "package_key": "proc-macro2-1.0.106",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "quote",
+            "package_key": "quote-1.0.46",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": false,
+            "optional": true,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "unicode_ident",
+            "package_key": "unicode-ident-1.0.24",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": [
+          "clone-impls",
+          "default",
+          "derive",
+          "parsing",
+          "printing",
+          "proc-macro"
+        ]
+      },
+      "thiserror-1.0.69": {
+        "runtime_dependencies": [
+          {
+            "name": "thiserror_impl",
+            "package_key": "thiserror-impl-1.0.69",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "thiserror-impl-1.0.69": {
+        "runtime_dependencies": [
+          {
+            "name": "proc_macro2",
+            "package_key": "proc-macro2-1.0.106",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "quote",
+            "package_key": "quote-1.0.46",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "syn",
+            "package_key": "syn-2.0.118",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "tree-sitter-0.22.6": {
+        "runtime_dependencies": [
+          {
+            "name": "regex",
+            "package_key": "regex-1.12.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-bash-0.21.0": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-c-0.21.4": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-cpp-0.22.3": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-css-0.21.1": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-go-0.21.2": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-highlight-0.22.6": {
+        "runtime_dependencies": [
+          {
+            "name": "lazy_static",
+            "package_key": "lazy_static-1.5.0",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "regex",
+            "package_key": "regex-1.12.4",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "thiserror",
+            "package_key": "thiserror-1.0.69",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "tree-sitter-html-0.20.4": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-json-0.21.0": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-python-0.21.0": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-ruby-0.21.0": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "tree-sitter-rust-0.21.2": {
+        "runtime_dependencies": [
+          {
+            "name": "tree_sitter",
+            "package_key": "tree-sitter-0.22.6",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [
+          {
+            "name": "cc",
+            "package_key": "cc-1.2.66",
+            "kind": "build",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "host"
+          }
+        ],
+        "features": []
+      },
+      "unicode-ident-1.0.24": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      },
+      "zmij-1.0.21": {
+        "runtime_dependencies": [],
+        "build_dependencies": [],
+        "features": []
+      }
+    },
+    "targets": {
+      "aarch64-apple-darwin": {
+        "overrides": {}
+      },
+      "aarch64-unknown-linux-gnu": {
+        "overrides": {}
+      },
+      "aarch64-unknown-linux-musl": {
+        "overrides": {}
+      },
+      "x86_64-apple-darwin": {
+        "overrides": {}
+      },
+      "x86_64-unknown-linux-gnu": {
+        "overrides": {}
+      },
+      "x86_64-unknown-linux-musl": {
+        "overrides": {}
+      }
+    }
+  },
+  "per_crate": {
+    "aho-corasick-1.1.4": {
+      "edition": "2021"
+    },
+    "cc-1.2.66": {
+      "edition": "2018"
+    },
+    "find-msvc-tools-0.1.9": {
+      "edition": "2018"
+    },
+    "hikari-core-0.1.9": {
+      "edition": "2024",
+      "lib_target": {
+        "name": "hikari_core",
+        "path": "src/lib.rs"
+      }
+    },
+    "hikari-token-0.1.9": {
+      "edition": "2024",
+      "lib_target": {
+        "name": "hikari_token",
+        "path": "src/lib.rs"
+      }
+    },
+    "hikari-ts-0.1.9": {
+      "edition": "2024",
+      "lib_target": {
+        "name": "hikari_ts",
+        "path": "src/lib.rs"
+      }
+    },
+    "itoa-1.0.18": {
+      "edition": "2021"
+    },
+    "lazy_static-1.5.0": {
+      "edition": "2015"
+    },
+    "memchr-2.8.3": {
+      "edition": "2021"
+    },
+    "proc-macro2-1.0.106": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "quote-1.0.46": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "regex-1.12.4": {
+      "edition": "2021"
+    },
+    "regex-automata-0.4.14": {
+      "edition": "2021"
+    },
+    "regex-syntax-0.8.11": {
+      "edition": "2021"
+    },
+    "serde-1.0.228": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "serde_core-1.0.228": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "serde_derive-1.0.228": {
+      "edition": "2021",
+      "proc_macro": true
+    },
+    "serde_json-1.0.150": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "shlex-2.0.1": {
+      "edition": "2018"
+    },
+    "syn-2.0.118": {
+      "edition": "2021"
+    },
+    "thiserror-1.0.69": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    },
+    "thiserror-impl-1.0.69": {
+      "edition": "2021",
+      "proc_macro": true
+    },
+    "tree-sitter-0.22.6": {
+      "edition": "2021",
+      "build_script": "binding_rust/build.rs",
+      "links": "tree-sitter",
+      "lib_target": {
+        "name": "tree_sitter",
+        "path": "binding_rust/lib.rs"
+      }
+    },
+    "tree-sitter-bash-0.21.0": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_bash",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-c-0.21.4": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_c",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-cpp-0.22.3": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_cpp",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-css-0.21.1": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_css",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-go-0.21.2": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_go",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-highlight-0.22.6": {
+      "edition": "2021"
+    },
+    "tree-sitter-html-0.20.4": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_html",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-json-0.21.0": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_json",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-python-0.21.0": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_python",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-ruby-0.21.0": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_ruby",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "tree-sitter-rust-0.21.2": {
+      "edition": "2021",
+      "build_script": "bindings/rust/build.rs",
+      "lib_target": {
+        "name": "tree_sitter_rust",
+        "path": "bindings/rust/lib.rs"
+      }
+    },
+    "unicode-ident-1.0.24": {
+      "edition": "2021"
+    },
+    "zmij-1.0.21": {
+      "edition": "2021",
+      "build_script": "build.rs"
+    }
+  },
+  "git_nar_sha256": {},
+  "flake_metadata": {}
+}

@@ -35,9 +35,7 @@ use hikari_core::{
 };
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use tree_sitter::{
-    InputEdit, Language as TsLanguage, Parser, Point, Tree,
-};
+use tree_sitter::{InputEdit, Language as TsLanguage, Parser, Point, Tree};
 use tree_sitter_highlight::{HighlightConfiguration, HighlightEvent, Highlighter as TsHighlighter};
 
 // The fleet semantic highlight vocabulary — owned by hikari-token, re-exported
@@ -462,24 +460,53 @@ fn canonical_highlight_names() -> Vec<&'static str> {
     ]
 }
 
+/// A tree-sitter capture name -> [`Semantic`].
+///
+/// **`hlclass_to_semantic` is the authority on what each `Semantic` MEANS**,
+/// and four arms here used to contradict it. The reverse map states the two
+/// groups explicitly:
+///
+/// ```text
+/// // accent-colored identifiers + emphasis fold to Accent.
+/// HlClass::Type | HlClass::Function | HlClass::Namespace | ... => Semantic::Accent,
+/// // symbolic tokens fold to Symbol.
+/// HlClass::Punctuation | HlClass::Operator => Semantic::Symbol,
+/// ```
+///
+/// So a `function` capture is an accent-coloured IDENTIFIER, not a symbolic
+/// token; an `operator` and `punctuation` ARE symbolic tokens; and a
+/// `variable` is neither. Before this, `Semantic::Symbol` became
+/// `HlClass::Punctuation` downstream, so **every function name in every
+/// language was classified as punctuation** — and consumers painted them with
+/// the punctuation colour, which renders perfectly and is simply wrong.
+///
+/// Found by escriba, whose symbol outline filtered spans for
+/// `Function | Type | Namespace` and got nothing back for ordinary Rust.
 fn highlight_index_to_semantic(index: usize, names: &[&'static str]) -> Semantic {
     let name = names.get(index).copied().unwrap_or("");
     match name {
         n if n.starts_with("keyword") => Semantic::Keyword,
-        n if n.starts_with("function") => Semantic::Symbol,
+        // An identifier, not a symbolic token.
+        n if n.starts_with("function") => Semantic::Accent,
         n if n.starts_with("type") => Semantic::Accent,
         n if n.starts_with("constant.builtin") || n == "boolean" => Semantic::Literal,
         n if n.starts_with("constant") => Semantic::Literal,
         n if n.starts_with("string") => Semantic::String,
         n if n == "number" => Semantic::Number,
         n if n.starts_with("comment") => Semantic::Comment,
-        n if n.starts_with("operator") => Semantic::Accent,
-        n if n.starts_with("punctuation") => Semantic::Muted,
-        n if n.starts_with("variable") => Semantic::Symbol,
+        // `HlClass::Operator` and `HlClass::Punctuation` are exactly what
+        // `Semantic::Symbol` folds from. These two were swapped.
+        n if n.starts_with("operator") => Semantic::Symbol,
+        n if n.starts_with("punctuation") => Semantic::Symbol,
+        // A variable is an identifier, and NOT punctuation.
+        n if n.starts_with("variable") => Semantic::Unchanged,
         n if n == "attribute" => Semantic::Hint,
         n if n == "label" => Semantic::Hint,
         n if n == "tag" => Semantic::Keyword,
-        _ => Semantic::Symbol,
+        // An unrecognised capture is ordinary text. It used to be `Symbol`,
+        // which made every unknown capture render as punctuation — the
+        // loudest possible default for the case we know least about.
+        _ => Semantic::Unchanged,
     }
 }
 
@@ -666,5 +693,60 @@ mod tests {
         let start = old.find('1').unwrap();
         let e = TsEdit::from_splice(old, new, start, start + 1);
         assert_eq!(e.new_end_byte, start + 2);
+    }
+}
+
+#[cfg(test)]
+mod capture_semantics {
+    use super::*;
+    use hikari_token::hlclass_to_semantic;
+
+    /// The capture->Semantic map must agree with `hlclass_to_semantic`, which
+    /// is where each `Semantic`'s MEANING is stated.
+    ///
+    /// Four arms contradicted it: `function` and `variable` folded to
+    /// `Symbol` (the symbolic-token bucket) while `operator` folded to
+    /// `Accent` (the identifier bucket) and `punctuation` to `Muted`. The
+    /// downstream effect was that every function name in every language was
+    /// classified — and painted — as punctuation.
+    fn sem(name: &'static str) -> Semantic {
+        highlight_index_to_semantic(0, &[name])
+    }
+
+    #[test]
+    fn identifiers_fold_to_the_identifier_bucket() {
+        // `hlclass_to_semantic` puts Function/Type/Namespace in Accent.
+        assert_eq!(sem("function"), Semantic::Accent);
+        assert_eq!(sem("function.method"), Semantic::Accent);
+        assert_eq!(sem("type"), Semantic::Accent);
+        assert_eq!(hlclass_to_semantic(HlClass::Function), Semantic::Accent);
+        assert_eq!(hlclass_to_semantic(HlClass::Type), Semantic::Accent);
+    }
+
+    #[test]
+    fn symbolic_tokens_fold_to_the_symbolic_bucket() {
+        // …and Punctuation/Operator in Symbol. These two were swapped.
+        assert_eq!(sem("operator"), Semantic::Symbol);
+        assert_eq!(sem("punctuation.bracket"), Semantic::Symbol);
+        assert_eq!(hlclass_to_semantic(HlClass::Operator), Semantic::Symbol);
+        assert_eq!(hlclass_to_semantic(HlClass::Punctuation), Semantic::Symbol);
+    }
+
+    #[test]
+    fn a_function_name_is_never_classified_as_punctuation() {
+        // The defect, stated as the thing a reader would notice.
+        let class: HlClass = sem("function").into();
+        assert_ne!(
+            class,
+            HlClass::Punctuation,
+            "a function NAME is not a symbolic token",
+        );
+    }
+
+    #[test]
+    fn an_unknown_capture_is_ordinary_text_not_punctuation() {
+        // The loudest possible default for the case we know least about.
+        let class: HlClass = sem("something.nobody.mapped").into();
+        assert_ne!(class, HlClass::Punctuation);
     }
 }
