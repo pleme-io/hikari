@@ -152,9 +152,9 @@
         "preBuild": "export CARGO_CRATE_NAME=find_msvc_tools;"
       }
     },
-    "hikari-core-0.1.9": {
+    "hikari-core-0.1.10": {
       "name": "hikari-core",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "edition": "2024",
       "source": {
         "kind": "path",
@@ -174,7 +174,7 @@
       "crate_renames": {},
       "build_rust_crate_args": {
         "crateName": "hikari-core",
-        "version": "0.1.9",
+        "version": "0.1.10",
         "edition": "2024",
         "release": true,
         "libName": "hikari_core",
@@ -182,9 +182,9 @@
         "preBuild": "export CARGO_CRATE_NAME=hikari_core;"
       }
     },
-    "hikari-token-0.1.9": {
+    "hikari-token-0.1.10": {
       "name": "hikari-token",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "edition": "2024",
       "source": {
         "kind": "path",
@@ -202,7 +202,7 @@
       "runtime_dependencies": [
         {
           "name": "hikari_core",
-          "package_key": "hikari-core-0.1.9",
+          "package_key": "hikari-core-0.1.10",
           "kind": "normal",
           "features": [],
           "uses_default_features": true,
@@ -227,19 +227,19 @@
       "crate_renames": {
         "hikari-core": [
           {
-            "version": "0.1.9",
+            "version": "0.1.10",
             "rename": "hikari_core"
           }
         ]
       },
       "build_rust_crate_args": {
         "crateName": "hikari-token",
-        "version": "0.1.9",
+        "version": "0.1.10",
         "edition": "2024",
         "crateRenames": {
           "hikari-core": [
             {
-              "version": "0.1.9",
+              "version": "0.1.10",
               "rename": "hikari_core"
             }
           ]
@@ -250,9 +250,9 @@
         "preBuild": "export CARGO_CRATE_NAME=hikari_token;"
       }
     },
-    "hikari-ts-0.1.9": {
+    "hikari-ts-0.1.10": {
       "name": "hikari-ts",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "edition": "2024",
       "source": {
         "kind": "path",
@@ -270,7 +270,7 @@
       "runtime_dependencies": [
         {
           "name": "hikari_core",
-          "package_key": "hikari-core-0.1.9",
+          "package_key": "hikari-core-0.1.10",
           "kind": "normal",
           "features": [],
           "uses_default_features": true,
@@ -280,7 +280,7 @@
         },
         {
           "name": "hikari_token",
-          "package_key": "hikari-token-0.1.9",
+          "package_key": "hikari-token-0.1.10",
           "kind": "normal",
           "features": [],
           "uses_default_features": true,
@@ -435,13 +435,13 @@
       "crate_renames": {
         "hikari-core": [
           {
-            "version": "0.1.9",
+            "version": "0.1.10",
             "rename": "hikari_core"
           }
         ],
         "hikari-token": [
           {
-            "version": "0.1.9",
+            "version": "0.1.10",
             "rename": "hikari_token"
           }
         ],
@@ -520,18 +520,18 @@
       },
       "build_rust_crate_args": {
         "crateName": "hikari-ts",
-        "version": "0.1.9",
+        "version": "0.1.10",
         "edition": "2024",
         "crateRenames": {
           "hikari-core": [
             {
-              "version": "0.1.9",
+              "version": "0.1.10",
               "rename": "hikari_core"
             }
           ],
           "hikari-token": [
             {
-              "version": "0.1.9",
+              "version": "0.1.10",
               "rename": "hikari_token"
             }
           ],
@@ -2574,11 +2574,11 @@
       }
     }
   },
-  "root_crate": "hikari-core-0.1.9",
+  "root_crate": "hikari-core-0.1.10",
   "workspace_members": [
-    "hikari-core-0.1.9",
-    "hikari-token-0.1.9",
-    "hikari-ts-0.1.9"
+    "hikari-core-0.1.10",
+    "hikari-token-0.1.10",
+    "hikari-ts-0.1.10"
   ],
   "flake_metadata": {
     "hikari-core": {
@@ -2646,16 +2646,16 @@
         "build_dependencies": [],
         "features": []
       },
-      "hikari-core-0.1.9": {
+      "hikari-core-0.1.10": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
       },
-      "hikari-token-0.1.9": {
+      "hikari-token-0.1.10": {
         "runtime_dependencies": [
           {
             "name": "hikari_core",
-            "package_key": "hikari-core-0.1.9",
+            "package_key": "hikari-core-0.1.10",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -2679,11 +2679,11 @@
         "build_dependencies": [],
         "features": []
       },
-      "hikari-ts-0.1.9": {
+      "hikari-ts-0.1.10": {
         "runtime_dependencies": [
           {
             "name": "hikari_core",
-            "package_key": "hikari-core-0.1.9",
+            "package_key": "hikari-core-0.1.10",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -2693,7 +2693,7 @@
           },
           {
             "name": "hikari_token",
-            "package_key": "hikari-token-0.1.9",
+            "package_key": "hikari-token-0.1.10",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -3663,9 +3663,9 @@
       }
     }
   },
-  "cargo_lock_sha256": "4b8222dd9d736106ebd7c6ff002fc19bf466ec2c586fdf3cade78630a974ba33",
+  "cargo_lock_sha256": "915d189daa94e351d283a20b4a1a217193f06b1b80639acea172eed0e9c0acf9",
   "manifest_sha256": {
-    "Cargo.toml": "1d1365172f8bbcd24a3b7006915658da9ad3855c396b02e5e261b92318dd22ea",
+    "Cargo.toml": "b029614b88b338514672b7518414a5f45ce627dda4072b68e688ff15a7171c49",
     "crates/hikari-core/Cargo.toml": "894d42ee864b753eeec7e6d700624f8d1a805d4d31c96a806ea02f57a4eb2e9d",
     "crates/hikari-token/Cargo.toml": "5035a2e9e3613df28cdbc1885ecc31671a973d88760470d840d3171ff3ecd090",
     "crates/hikari-ts/Cargo.toml": "97c1e2a32425ddef262f5d3a7fb262c73881fe612b5011f86737c599094911bf"
