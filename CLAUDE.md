@@ -1,12 +1,10 @@
 # hikari (光)
 
 > **★★★ CSE / Knowable Construction.** This repo operates under
-> **Constructive Substrate Engineering** — canonical spec at
-> [`pleme-io/theory/CONSTRUCTIVE-SUBSTRATE-ENGINEERING.md`](https://github.com/pleme-io/theory/blob/main/CONSTRUCTIVE-SUBSTRATE-ENGINEERING.md).
+> **Constructive Substrate Engineering**.
 > The Compounding Directive is in the org-level pleme-io/CLAUDE.md.
 
-The pluggable syntax-highlighting spine for pleme-io editors + tools. Design
-doc + roadmap: [`theory/HIKARI.md`](https://github.com/pleme-io/theory/blob/main/HIKARI.md).
+The pluggable syntax-highlighting spine for pleme-io editors + tools.
 
 ## Layout
 
