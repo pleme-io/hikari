@@ -3,7 +3,7 @@
 //! Every tree-sitter grammar hikari-ts registers MUST have a row here. If a
 //! new grammar is added upstream and no row is added, `every_grammar_has_a_row`
 //! fails the build — the guard that keeps the runtime ABI + the capture→HlClass
-//! intent coherent as the go-wide language set grows (HIKARI.md §V).
+//! intent coherent as the go-wide language set grows.
 
 use hikari_core::Highlighter;
 use hikari_ts::TreeSitterHost;
